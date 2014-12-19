@@ -30,6 +30,11 @@ var mainState = {
     // Da playa!
     this.player = game.add.sprite(400, 500, 'player');
     this.player.anchor.setTo(0.5, 0.5);
+
+    game.physics.enable(this.player, Phaser.Physics.ARCADE);
+
+    // Add some controls to play the game with
+    this.cursors = game.input.keyboard.createCursorKeys();
   },
 
 
@@ -39,8 +44,26 @@ var mainState = {
    * @type {Function}
    */
   update: function() {
+    // Increase velocity if SHIFT is down
+    var defaultVelocity = game.input.keyboard.isDown(Phaser.Keyboard.SHIFT) ? 800 : 200;
+
     // Scroll the background
     this.starfield.tilePosition.y += 2;
+
+    // Reset the game, then check for movement keys
+    this.player.body.velocity.setTo(0, 0);
+
+    if(this.cursors.left.isDown) {
+      this.player.body.velocity.x = -1 * defaultVelocity;
+    } else if(this.cursors.right.isDown) {
+      this.player.body.velocity.x = defaultVelocity;
+    }
+
+    if(this.cursors.up.isDown) {
+      this.player.body.velocity.y = -1 * defaultVelocity;
+    } else if(this.cursors.down.isDown) {
+      this.player.body.velocity.y = defaultVelocity;
+    }
   }
 
 };
