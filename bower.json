@@ -1,0 +1,7 @@
+{
+  "name": "space-shooter",
+  "private": true,
+  "dependencies": {
+    "phaser": "~2.2.0"
+  }
+}
