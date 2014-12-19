@@ -13,8 +13,8 @@ var mainState = {
    * @type {Function}
    */
   preload: function() {
-    game.load.image('startfield', '/assets/images/starfield.png');
-    game.load.image('player',     '/assets/images/player.png');
+    game.load.image('starfield', '/assets/images/starfield.png');
+    game.load.image('player',    '/assets/images/player.png');
   },
 
 
@@ -25,7 +25,7 @@ var mainState = {
    */
   create: function() {
     // The scrolling starfield background
-    this.startfield = game.add.tileSprite(0, 0, 800, 600, 'startfield');
+    this.starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
 
     // Da playa!
     this.player = game.add.sprite(400, 500, 'player');
@@ -39,6 +39,8 @@ var mainState = {
    * @type {Function}
    */
   update: function() {
+    // Scroll the background
+    this.starfield.tilePosition.y += 2;
   }
 
 };
