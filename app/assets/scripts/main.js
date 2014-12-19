@@ -3,6 +3,9 @@
 // Initialize Phaser, and create a 800x600px game
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
+var ACCELERATION = 600,
+    MAXSPEED     = 400,
+    DRAG         = 400;
 
 // Create our 'main' state that will contain the game
 var mainState = {
@@ -33,6 +36,9 @@ var mainState = {
 
     game.physics.enable(this.player, Phaser.Physics.ARCADE);
 
+    this.player.body.maxVelocity.setTo(MAXSPEED, MAXSPEED);
+    this.player.body.drag.setTo(DRAG, DRAG);
+
     // Add some controls to play the game with
     this.cursors = game.input.keyboard.createCursorKeys();
   },
@@ -45,24 +51,26 @@ var mainState = {
    */
   update: function() {
     // Increase velocity if SHIFT is down
-    var defaultVelocity = game.input.keyboard.isDown(Phaser.Keyboard.SHIFT) ? 800 : 200;
+    var defaultAcceleration = game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)
+      ? ACCELERATION * 3 : ACCELERATION;
 
     // Scroll the background
     this.starfield.tilePosition.y += 2;
 
     // Reset the game, then check for movement keys
-    this.player.body.velocity.setTo(0, 0);
+    this.player.body.acceleration.x = 0;
+    this.player.body.acceleration.y = 0;
 
     if(this.cursors.left.isDown) {
-      this.player.body.velocity.x = -1 * defaultVelocity;
+      this.player.body.acceleration.x = -defaultAcceleration;
     } else if(this.cursors.right.isDown) {
-      this.player.body.velocity.x = defaultVelocity;
+      this.player.body.acceleration.x = defaultAcceleration;
     }
 
     if(this.cursors.up.isDown) {
-      this.player.body.velocity.y = -1 * defaultVelocity;
+      this.player.body.acceleration.y = -defaultAcceleration;
     } else if(this.cursors.down.isDown) {
-      this.player.body.velocity.y = defaultVelocity;
+      this.player.body.acceleration.y = defaultAcceleration;
     }
   }
 
