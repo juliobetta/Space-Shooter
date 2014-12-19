@@ -72,6 +72,11 @@ var mainState = {
     } else if(this.cursors.down.isDown) {
       this.player.body.acceleration.y = defaultAcceleration;
     }
+
+    // Squish and rotate ship for illusion of "bank"
+    this.bank = this.player.body.velocity.x / MAXSPEED;
+    this.player.scale.x = 1 - Math.abs(this.bank) / 2;
+    this.player.angle = this.bank * 10;
   }
 
 };
