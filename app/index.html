@@ -3,11 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <title> Space Shooter </title>
-
-    <script type="text/javascript" src="bower_components/phaser/build/phaser.min.js"></script>
-    <script type="text/javascript" src="assets/scripts/main.js"></script>
   </head>
 
-  <body>
-  </body>
+  <body></body>
+
+  <script type="text/javascript" src="bower_components/phaser/build/phaser.min.js"></script>
+  <script type="text/javascript" src="bower_components/module/module.min.js"></script>
+  <script type="text/javascript" src="bower_components/EventBus/src/EventBus.js"></script>
+  <script type="text/javascript" src="assets/scripts/utils/constants.js"></script>
+  <script type="text/javascript" src="assets/scripts/utils/namespace.js"></script>
+  <script type="text/javascript" src="assets/scripts/utils/extend.js"></script>
+  <script type="text/javascript" src="assets/scripts/app.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/controls.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/starfield.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/player.js"></script>
+
+  <script>
+    /**
+     * Run Application modules and Components
+     * @return {void}
+     */
+    window.onload = function() { Shooter.Application.run(); };
+  </script>
+
 </html>
