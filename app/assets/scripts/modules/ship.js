@@ -41,6 +41,7 @@ Module('Shooter.Ship', function(Ship) {
 
   /**
    * Before move
+   * @param  {Object} event
    */
   Ship.fn.beforeMove = function(event) {
     this.resetState();
@@ -49,6 +50,7 @@ Module('Shooter.Ship', function(Ship) {
 
   /**
    * Move player
+   * @param  {Object} event
    * @param {Integer} acceleration
    */
   Ship.fn.move = function(event, direction, acceleration) {
@@ -57,6 +59,19 @@ Module('Shooter.Ship', function(Ship) {
     }
 
     this.ship.body.acceleration[direction] = acceleration;
+  };
+
+
+  /**
+   * Move ship with mouse
+   * @param  {Object} event
+   * @param  {Integer} inputX Game input x position
+   */
+  Ship.fn.moveWithMouse = function(event, inputX) {
+    var minDist = 200,
+        dist    = inputX - this.ship.x;
+
+    this.ship.body.velocity.x = MAXSPEED * GAME.math.clamp(dist / minDist, -1, 1);
   };
 
 
@@ -101,6 +116,7 @@ Module('Shooter.Ship', function(Ship) {
   Ship.fn.bindEvents = function() {
     EventBus.addEventListener('before-cursorkey-pressed', this.beforeMove, Ship.fn);
     EventBus.addEventListener('cursorkey-pressed', this.move, Ship.fn);
+    EventBus.addEventListener('mouse-moved', this.moveWithMouse, Ship.fn);
   };
 
 
