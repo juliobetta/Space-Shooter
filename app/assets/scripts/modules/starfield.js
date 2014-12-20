@@ -7,11 +7,6 @@ Module('Shooter.Starfield', function(Starfield) {
    * ########################################################################################
   */
 
-  Starfield.fn.preload = function() {
-    GAME.load.image('starfield', '/assets/images/starfield.png');
-  };
-
-
   Starfield.fn.create = function() {
     this.starfield = GAME.add.tileSprite(0, 0, 800, 600, 'starfield');
   };
@@ -26,7 +21,6 @@ Module('Shooter.Starfield', function(Starfield) {
   // ########################################################################################
 
 
-  Shooter.Application.addToPreload(Starfield.fn.preload.bind(Starfield.fn));
   Shooter.Application.addToCreate(Starfield.fn.create.bind(Starfield.fn));
   Shooter.Application.addToUpdate(Starfield.fn.update.bind(Starfield.fn));
 });

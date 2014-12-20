@@ -126,12 +126,6 @@ Module('Shooter.Ship', function(Ship) {
    * ########################################################################################
   */
 
-  Ship.fn.preload = function() {
-    GAME.load.image('ship',   '/assets/images/ship.png');
-    GAME.load.image('bullet', '/assets/images/bullet.png');
-  };
-
-
   Ship.fn.create = function() {
     this.ship = GAME.add.sprite(400, 500, 'ship');
     this.shipTrail = GAME.add.emitter(this.ship.x, this.ship.y + 10, 400);
@@ -154,8 +148,6 @@ Module('Shooter.Ship', function(Ship) {
   // ########################################################################################
   // ########################################################################################
 
-
-  Shooter.Application.addToPreload(Ship.fn.preload.bind(Ship.fn));
   Shooter.Application.addToCreate(Ship.fn.create.bind(Ship.fn));
   Shooter.Application.addToUpdate(Ship.fn.update.bind(Ship.fn));
 });
