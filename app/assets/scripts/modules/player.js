@@ -46,6 +46,28 @@ Module('Shooter.Player', function(Player) {
 
 
   /**
+   * Stop player at screen edges
+   */
+  Player.fn.stopAtScreenEdges = function() {
+    var self = this, dimension;
+
+    ['x', 'y'].forEach(function(direction) {
+      dimension = direction === 'y' ? 'height' : 'width';
+
+      if(self.player[direction] > GAME[dimension] - 50) {
+        self.player[direction] = GAME[dimension] - 50;
+        self.player.body.acceleration[direction] = 0;
+      }
+
+      if(self.player[direction] < 50) {
+        self.player[direction] = 50;
+        self.player.body.acceleration[direction] = 0;
+      }
+    });
+  };
+
+
+  /**
    * Squish and rotate ship for illusion of "bank"
    */
   Player.fn.createBankEffect = function() {
@@ -86,6 +108,7 @@ Module('Shooter.Player', function(Player) {
 
 
   Player.fn.update = function() {
+    this.stopAtScreenEdges();
     this.createBankEffect();
   };
 
