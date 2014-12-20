@@ -1,17 +1,17 @@
 /**
- * Add Controls to play the game
+ * Add Cursors controls to play the game
  */
-Module('Shooter.Controls', function(Controls) {
+Module('Shooter.Controls.Cursors', function(Cursors) {
   'use strict';
 
   /**
    * Dispatch cursor event
    */
-  Controls.fn.dispatchCursorEvent = function(direction) {
+  Cursors.fn.dispatchCursorEvent = function(direction) {
     var acceleration = direction === LEFT || direction === UP ? -ACCELERATION : ACCELERATION,
         coordinate   = direction === LEFT || direction === RIGHT ? 'x' : 'y';
 
-    EventBus.dispatch('cursorkey-pressed', Controls.fn, coordinate, acceleration);
+    EventBus.dispatch('cursorkey-pressed', Cursors.fn, coordinate, acceleration);
   };
 
 
@@ -21,7 +21,7 @@ Module('Shooter.Controls', function(Controls) {
    * ########################################################################################
   */
 
-  Controls.fn.initialize = function() {
+  Cursors.fn.initialize = function() {
     this.cursors = GAME.input.keyboard.createCursorKeys();
   };
 
@@ -32,13 +32,13 @@ Module('Shooter.Controls', function(Controls) {
    * ########################################################################################
   */
 
-  Controls.fn.create = function() {
+  Cursors.fn.create = function() {
     this.initialize();
   };
 
 
-  Controls.fn.update = function() {
-    EventBus.dispatch('before-cursorkey-pressed', Controls.fn);
+  Cursors.fn.update = function() {
+    EventBus.dispatch('before-cursorkey-pressed', Cursors.fn);
 
     if(this.cursors.left.isDown) {
       this.dispatchCursorEvent(LEFT);
@@ -57,7 +57,7 @@ Module('Shooter.Controls', function(Controls) {
   // ########################################################################################
 
 
-  Shooter.Application.addToCreate(Controls.fn.create.bind(Controls.fn));
-  Shooter.Application.addToUpdate(Controls.fn.update.bind(Controls.fn));
+  Shooter.Application.addToCreate(Cursors.fn.create.bind(Cursors.fn));
+  Shooter.Application.addToUpdate(Cursors.fn.update.bind(Cursors.fn));
 
 });
