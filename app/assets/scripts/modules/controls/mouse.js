@@ -4,6 +4,19 @@
 Module('Shooter.Controls.Mouse', function(Mouse) {
   'use strict';
 
+  /**
+   * Move sideways
+   */
+  Mouse.fn.moveSideways = function() {
+    if(GAME.input.x < GAME.width - 20 &&
+       GAME.input.x > 20 &&
+       GAME.input.y > 20 &&
+       GAME.input.y < GAME.height - 20)
+    {
+      EventBus.dispatch('mouse-moved', Mouse.fn, GAME.input.x);
+    }
+  };
+
 
   /**
    * ########################################################################################
@@ -12,12 +25,10 @@ Module('Shooter.Controls.Mouse', function(Mouse) {
   */
 
   Mouse.fn.update = function() {
-    if(GAME.input.x < GAME.width - 20 &&
-       GAME.input.x > 20 &&
-       GAME.input.y > 20 &&
-       GAME.input.y < GAME.height - 20)
-    {
-      EventBus.dispatch('mouse-moved', Mouse.fn, GAME.input.x);
+    this.moveSideways();
+
+    if(GAME.input.activePointer.isDown) {
+      EventBus.dispatch('firebutton-hit', Mouse.fn);
     }
   };
 

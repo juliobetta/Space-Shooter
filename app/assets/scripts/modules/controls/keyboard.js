@@ -1,17 +1,17 @@
 /**
- * Add Cursors controls to play the game
+ * Add Keyboard controls to play the game
  */
-Module('Shooter.Controls.Cursors', function(Cursors) {
+Module('Shooter.Controls.Keyboard', function(Keyboard) {
   'use strict';
 
   /**
    * Dispatch cursor event
    */
-  Cursors.fn.dispatchCursorEvent = function(direction) {
+  Keyboard.fn.dispatchCursorEvent = function(direction) {
     var acceleration = direction === LEFT || direction === UP ? -ACCELERATION : ACCELERATION,
         coordinate   = direction === LEFT || direction === RIGHT ? 'x' : 'y';
 
-    EventBus.dispatch('cursorkey-pressed', Cursors.fn, coordinate, acceleration);
+    EventBus.dispatch('cursorkey-pressed', Keyboard.fn, coordinate, acceleration);
   };
 
 
@@ -21,8 +21,9 @@ Module('Shooter.Controls.Cursors', function(Cursors) {
    * ########################################################################################
   */
 
-  Cursors.fn.initialize = function() {
-    this.cursors = GAME.input.keyboard.createCursorKeys();
+  Keyboard.fn.initialize = function() {
+    this.cursors    = GAME.input.keyboard.createCursorKeys();
+    this.fireButton = GAME.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   };
 
 
@@ -32,13 +33,13 @@ Module('Shooter.Controls.Cursors', function(Cursors) {
    * ########################################################################################
   */
 
-  Cursors.fn.create = function() {
+  Keyboard.fn.create = function() {
     this.initialize();
   };
 
 
-  Cursors.fn.update = function() {
-    EventBus.dispatch('before-cursorkey-pressed', Cursors.fn);
+  Keyboard.fn.update = function() {
+    EventBus.dispatch('before-key-pressed', Keyboard.fn);
 
     if(this.cursors.left.isDown) {
       this.dispatchCursorEvent(LEFT);
@@ -51,13 +52,16 @@ Module('Shooter.Controls.Cursors', function(Cursors) {
     } else if(this.cursors.down.isDown) {
       this.dispatchCursorEvent(DOWN);
     }
+
+    if(this.fireButton.isDown) {
+      EventBus.dispatch('firebutton-hit', Keyboard.fn);
+    }
   };
 
   // ########################################################################################
   // ########################################################################################
 
 
-  Shooter.Application.addToCreate(Cursors.fn.create.bind(Cursors.fn));
-  Shooter.Application.addToUpdate(Cursors.fn.update.bind(Cursors.fn));
-
+  Shooter.Application.addToCreate(Keyboard.fn.create.bind(Keyboard.fn));
+  Shooter.Application.addToUpdate(Keyboard.fn.update.bind(Keyboard.fn));
 });

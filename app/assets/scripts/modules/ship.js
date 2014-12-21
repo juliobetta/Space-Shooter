@@ -14,28 +14,13 @@ Module('Shooter.Ship', function(Ship) {
   /**
    * Add player properties
    */
-  Ship.fn.addShipProperties = function() {
+  Ship.fn.addProperties = function() {
     this.ship.anchor.setTo(0.5, 0.5);
 
     GAME.physics.enable(this.ship, Phaser.Physics.ARCADE);
 
     this.ship.body.maxVelocity.setTo(MAXSPEED, MAXSPEED);
     this.ship.body.drag.setTo(DRAG, DRAG);
-  };
-
-
-  /**
-   * Add ship trail properties
-   */
-  Ship.fn.addShipTrailProperties = function() {
-    this.shipTrail.width = 10;
-    this.shipTrail.makeParticles('bullet');
-    this.shipTrail.setXSpeed(30, -30);
-    this.shipTrail.setYSpeed(200, 180);
-    this.shipTrail.setRotation(50, -50);
-    this.shipTrail.setAlpha(1, 0.01, 800);
-    this.shipTrail.setScale(0.05, 0.4, 0.05, 0.4, 2000, Phaser.Easing.Quintic.Out);
-    this.shipTrail.start(false, 5000, 10);
   };
 
 
@@ -108,15 +93,33 @@ Module('Shooter.Ship', function(Ship) {
 
 
   /**
+   * Fire bullets
+   * @param  {Object} event
+   * @param  {Array} bullets
+   */
+  Ship.fn.fireBullets = function(event, bullets) {
+    // Grab the first bullet we can from the pool ...
+    var bullet = bullets.getFirstExists(false);
+
+    if(bullet) {
+      // ... and fire it
+      bullet.reset(this.ship.x, this.ship.y + 8);
+      bullet.body.velocity.y = -400;
+    }
+  };
+
+
+  /**
    * ########################################################################################
    * Event Listeners ########################################################################
    * ########################################################################################
   */
 
   Ship.fn.bindEvents = function() {
-    EventBus.addEventListener('before-cursorkey-pressed', this.beforeMove, Ship.fn);
-    EventBus.addEventListener('cursorkey-pressed', this.move, Ship.fn);
-    EventBus.addEventListener('mouse-moved', this.moveWithMouse, Ship.fn);
+    EventBus.addEventListener('before-key-pressed', this.beforeMove, Ship.fn);
+    EventBus.addEventListener('cursorkey-pressed',  this.move, Ship.fn);
+    EventBus.addEventListener('mouse-moved',        this.moveWithMouse, Ship.fn);
+    EventBus.addEventListener('bullets-ready',      this.fireBullets, Ship.fn);
   };
 
 
@@ -128,10 +131,8 @@ Module('Shooter.Ship', function(Ship) {
 
   Ship.fn.create = function() {
     this.ship = GAME.add.sprite(400, 500, 'ship');
-    this.shipTrail = GAME.add.emitter(this.ship.x, this.ship.y + 10, 400);
 
-    this.addShipProperties();
-    this.addShipTrailProperties();
+    this.addProperties();
     this.bindEvents();
   };
 
@@ -140,9 +141,7 @@ Module('Shooter.Ship', function(Ship) {
     this.stopAtScreenEdges();
     this.createBankEffect();
 
-    //  Keep the shipTrail lined up with the ship
-    this.shipTrail.x = this.ship.x;
-    this.shipTrail.y = this.ship.y;
+    EventBus.dispatch('ship-updated', Ship.fn, this.ship);
   };
 
   // ########################################################################################
