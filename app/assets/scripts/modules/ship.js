@@ -1,6 +1,10 @@
 Module('Shooter.Ship', function(Ship) {
   'use strict';
 
+  var BULLET_SPEED   = 400,
+      BULLET_SPACING = 250;
+
+  var bulletTimer = 0;
 
   /**
    * Reset player state
@@ -98,19 +102,29 @@ Module('Shooter.Ship', function(Ship) {
    * @param  {Array} bullets
    */
   Ship.fn.fireBullets = function(event, bullets) {
-    // Grab the first bullet we can from the pool and fire it
-    var bullet = bullets.getFirstExists(false),
-        bulletOffset;
+    var bullet, bulletOffset;
 
-    if(bullet) {
-      // Make bullet come out of tip of ship with right angle
-      bulletOffset = 20 * Math.sin(GAME.math.degToRad(this.ship.angle));
-      bullet.reset(this.ship.x + bulletOffset, this.ship.y);
-      bullet.angle = this.ship.angle;
-      GAME.physics.arcade.velocityFromAngle(
-        bullet.angle - 90, BULLET_SPEED, bullet.body.velocity
-      );
-      bullet.body.velocity.x += this.ship.body.velocity.x;
+    //  To avoid them being allowed to fire too fast we set a time limit
+    if (GAME.time.now > bulletTimer) {
+
+      // Grab the first bullet we can from the pool and fire it
+      bullet = bullets.getFirstExists(false);
+
+      if(bullet) {
+        // Make bullet come out of tip of ship with right angle
+        bulletOffset = 20 * Math.sin(GAME.math.degToRad(this.ship.angle));
+        bullet.reset(this.ship.x + bulletOffset, this.ship.y);
+        bullet.angle = this.ship.angle;
+
+        GAME.physics.arcade.velocityFromAngle(
+          bullet.angle - 90, BULLET_SPEED, bullet.body.velocity
+        );
+
+        bullet.body.velocity.x += this.ship.body.velocity.x;
+
+        bulletTimer = GAME.time.now + BULLET_SPACING;
+      }
+
     }
   };
 

@@ -4,6 +4,11 @@
 Module('Shooter.Controls.Keyboard', function(Keyboard) {
   'use strict';
 
+  var LEFT  = 'left',
+      RIGHT = 'right',
+      UP    = 'up',
+      DOWN  = 'down';
+
   /**
    * Dispatch cursor event
    */

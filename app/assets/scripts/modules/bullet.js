@@ -1,12 +1,12 @@
 Module('Shoter.Bullet', function(Bullet) {
   'use strict';
 
-
   /**
    * Initialize
    */
   Bullet.fn.initialize = function() {
     this.bullets = GAME.add.group();
+
     this.addProperties();
   };
 
