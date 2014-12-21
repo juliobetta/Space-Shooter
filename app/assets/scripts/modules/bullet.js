@@ -29,7 +29,6 @@ Module('Shoter.Bullet', function(Bullet) {
    * Prepare bullets to be fired
    */
   Bullet.fn.prepareBullets = function() {
-    console.log('firebutton hit');
     EventBus.dispatch('bullets-ready', Bullet.fn, this.bullets);
   };
 

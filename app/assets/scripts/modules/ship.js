@@ -98,13 +98,19 @@ Module('Shooter.Ship', function(Ship) {
    * @param  {Array} bullets
    */
   Ship.fn.fireBullets = function(event, bullets) {
-    // Grab the first bullet we can from the pool ...
-    var bullet = bullets.getFirstExists(false);
+    // Grab the first bullet we can from the pool and fire it
+    var bullet = bullets.getFirstExists(false),
+        bulletOffset;
 
     if(bullet) {
-      // ... and fire it
-      bullet.reset(this.ship.x, this.ship.y + 8);
-      bullet.body.velocity.y = -400;
+      // Make bullet come out of tip of ship with right angle
+      bulletOffset = 20 * Math.sin(GAME.math.degToRad(this.ship.angle));
+      bullet.reset(this.ship.x + bulletOffset, this.ship.y);
+      bullet.angle = this.ship.angle;
+      GAME.physics.arcade.velocityFromAngle(
+        bullet.angle - 90, BULLET_SPEED, bullet.body.velocity
+      );
+      bullet.body.velocity.x += this.ship.body.velocity.x;
     }
   };
 
