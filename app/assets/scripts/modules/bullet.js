@@ -1,4 +1,4 @@
-Module('Shoter.Bullet', function(Bullet) {
+Module('Shooter.Bullet', function(Bullet) {
   'use strict';
 
   /**
