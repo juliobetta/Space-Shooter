@@ -27,6 +27,21 @@ Module('Shooter.Collision', function(Collision) {
 
 
   /**
+   * Add explosion effect after collision on enemy
+   * @param {Object} explosion
+   * @param {Object} enemy
+   */
+  Collision.fn.enemyExplosionEffect = function(explosion, enemy) {
+    explosion.body.velocity.y = enemy.body.velocity.y;
+    explosion.alpha = 0.7;
+    explosion.play('explosion', 30, false, true);
+
+    enemy.kill();
+    if(enemy.trail.alive) enemy.trail.kill();
+  };
+
+
+  /**
    * Collision between player and enemy
    * @param  {Object} player
    * @param  {Object} enemy
@@ -39,15 +54,27 @@ Module('Shooter.Collision', function(Collision) {
       enemy.body.y + enemy.body.halfHeight
     );
 
-    explosion.body.velocity.y = enemy.body.velocity.y;
-    explosion.alpha = 0.7;
-    explosion.play('explosion', 30, false, true);
-
-    enemy.kill();
-    if(enemy.trail.alive) enemy.trail.kill();
+    this.enemyExplosionEffect(explosion, enemy);
   };
 
 
+  /**
+   * Collision between bullet and enemy
+   * @param  {Object} enemy
+   * @param  {Object} bullet
+   */
+  Collision.fn.hitEnemy = function(enemy, bullet) {
+    var explosion = this.explosions.getFirstExists(false);
+
+    explosion.reset(
+      bullet.body.x + bullet.body.halfWidth,
+      bullet.body.y + bullet.body.halfHeight
+    );
+
+    this.enemyExplosionEffect(explosion, enemy);
+
+    bullet.kill();
+  };
 
   /**
    * ########################################################################################
@@ -64,12 +91,23 @@ Module('Shooter.Collision', function(Collision) {
     var self = this;
 
     // http://docs.phaser.io/Phaser.Physics.Arcade.html#overlap
+
+    // Collision between ships
     GAME.physics.arcade.overlap(
       Shooter.Player.Ship.fn.ship,           // object 1
       Shooter.Enemies.GreenEnemy.fn.enemies, // object 2
       self.shipsCollide.bind(self),          // overlapCallback
       null,                                  // processCallback
       this                                   // callbackContext
+    );
+
+    // Collision between bullet and enemy
+    GAME.physics.arcade.overlap(
+      Shooter.Enemies.GreenEnemy.fn.enemies,
+      Shooter.Bullet.fn.bullets,
+      self.hitEnemy.bind(self),
+      null,
+      this
     );
   };
 
