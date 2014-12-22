@@ -50,6 +50,9 @@ Module('Shooter.Player.ShipTrail', function(ShipTrail) {
 
   ShipTrail.fn.bindEvents = function() {
     EventBus.addEventListener('ship-updated', this.updateCoordinates, ShipTrail.fn);
+    EventBus.addEventListener('ship-killed',  function() {
+      this.shipTrail.kill();
+    }, ShipTrail.fn);
   };
 
 

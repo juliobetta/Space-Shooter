@@ -37,7 +37,6 @@ Module('Shooter.Collision', function(Collision) {
     explosion.play('explosion', 30, false, true);
 
     enemy.kill();
-    if(enemy.trail.alive) enemy.trail.kill();
   };
 
 
@@ -55,6 +54,8 @@ Module('Shooter.Collision', function(Collision) {
     );
 
     this.enemyExplosionEffect(explosion, enemy);
+
+    EventBus.dispatch('ships-collided', Collision.fn, enemy);
   };
 
 

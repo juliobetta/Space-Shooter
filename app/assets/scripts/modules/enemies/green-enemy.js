@@ -34,8 +34,9 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
     this.enemies.forEach(function(enemy) {
       self.addEnemyEmitterTrail(enemy);
       enemy.body.setSize(enemy.width * 3/4, enemy.height * 3/4);
+      enemy.damageAmount = 20;
       enemy.events.onKilled.add(function() {
-        enemy.trail.kill;
+        enemy.trail.kill();
       });
     });
   };
