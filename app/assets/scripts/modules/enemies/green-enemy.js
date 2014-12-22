@@ -19,6 +19,8 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
    * Add green enemy properties
    */
   GreenEnemy.fn.addProperties = function() {
+    var self = this;
+
     this.enemies.enableBody = true;
     this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
     this.enemies.createMultiple(5, 'enemy-green');
@@ -28,8 +30,29 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
     this.enemies.setAll('scale.x', 0.5);
     this.enemies.setAll('scale.y', 0.5);
     this.enemies.setAll('angle', 180);
-    this.enemies.setAll('outOfBoundsKill', true);
-    this.enemies.setAll('checkWorldBounds', true);
+
+    this.enemies.forEach(function(enemy) {
+      self.addEnemyEmitterTrail(enemy);
+      enemy.events.onKilled.add(function() {
+        enemy.trail.kill;
+      });
+    });
+  };
+
+
+  /**
+   * Add emiter trail for enemy
+   */
+  GreenEnemy.fn.addEnemyEmitterTrail = function(enemy) {
+    var enemyTrail = GAME.add.emitter(enemy.x, enemy.y - 10, 100);
+
+    enemyTrail.width = 10;
+    enemyTrail.makeParticles('explosion', [1,2,3,4,5]);
+    enemyTrail.setXSpeed(20, -20);
+    enemyTrail.setRotation(50, -50);
+    enemyTrail.setAlpha(0.4, 0, 800);
+    enemyTrail.setScale(0.01, 0.1, 0.01, 0.1, 1000, Phaser.Easing.Quintic.Out);
+    enemy.trail = enemyTrail;
   };
 
 
@@ -46,10 +69,20 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
       enemy.body.velocity.y = ENEMY_SPEED;
       enemy.body.drag.x     = 100;
 
+      enemy.trail.start(false, 800, 1);
+
       enemy.update = function() {
         enemy.angle = 180 - GAME.math.radToDeg(
           Math.atan2(enemy.body.velocity.x, enemy.body.velocity.y)
         );
+
+        enemy.trail.x = enemy.x;
+        enemy.trail.y = enemy.y;
+
+        // Kill enemies once they go off screen
+        if(enemy.y > GAME.height + 200) {
+          enemy.kill();
+        }
       };
     }
 
