@@ -33,6 +33,7 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
 
     this.enemies.forEach(function(enemy) {
       self.addEnemyEmitterTrail(enemy);
+      enemy.body.setSize(enemy.width * 3/4, enemy.height * 3/4);
       enemy.events.onKilled.add(function() {
         enemy.trail.kill;
       });
@@ -108,9 +109,17 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
   GreenEnemy.fn.update = function() {
   };
 
+
+  GreenEnemy.fn.render = function() {
+    // for(var i = 0; i < this.enemies.length; i++) {
+    //   GAME.debug.body(this.enemies.children[i]);
+    // }
+  };
+
   // ########################################################################################
   // ########################################################################################
 
   Shooter.Application.addToCreate(GreenEnemy.fn.create.bind(GreenEnemy.fn));
   Shooter.Application.addToUpdate(GreenEnemy.fn.update.bind(GreenEnemy.fn));
+  Shooter.Application.addToRender(GreenEnemy.fn.render.bind(GreenEnemy.fn));
 });

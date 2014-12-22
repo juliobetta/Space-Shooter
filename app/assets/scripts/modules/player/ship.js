@@ -164,9 +164,15 @@ Module('Shooter.Player.Ship', function(Ship) {
     EventBus.dispatch('ship-updated', Ship.fn, this.ship);
   };
 
+
+  Ship.fn.render = function() {
+    // GAME.debug.body(this.ship);
+  };
+
   // ########################################################################################
   // ########################################################################################
 
   Shooter.Application.addToCreate(Ship.fn.create.bind(Ship.fn));
   Shooter.Application.addToUpdate(Ship.fn.update.bind(Ship.fn));
+  Shooter.Application.addToRender(Ship.fn.render.bind(Ship.fn));
 });

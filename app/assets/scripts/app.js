@@ -4,7 +4,8 @@ Module('Shooter.Application', function(Application) {
   var initialized = false,
       preload     = [],
       create      = [],
-      update      = [];
+      update      = [],
+      render      = [];
 
   /**
    * Add function to preload array
@@ -34,6 +35,15 @@ Module('Shooter.Application', function(Application) {
 
 
   /**
+   * Add function to render array
+   * @param {Function} fn
+   */
+  Application.addToRender = function(fn) {
+    render.push(fn);
+  };
+
+
+  /**
    * Run all functions inside initializers array
    * @return {void}
    */
@@ -47,9 +57,6 @@ Module('Shooter.Application', function(Application) {
       value = attrs[key];
       this[key] = value;
     }
-
-    // Initialize Phaser
-    GAME = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, '');
 
     // Create game main state
     mainState = {
@@ -69,8 +76,17 @@ Module('Shooter.Application', function(Application) {
         update.forEach(function(fn){
           fn();
         });
+      },
+
+      render: function() {
+        render.forEach(function(fn) {
+          fn();
+        });
       }
     };
+
+     // Initialize Phaser
+    GAME = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, '');
 
     // Add and start the 'main' state to start the game
     GAME.state.add('main', mainState);
