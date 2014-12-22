@@ -9,6 +9,9 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
       UP    = 'up',
       DOWN  = 'down';
 
+  var fireButtonEvt = 'firebutton-hit';
+
+
   /**
    * Dispatch cursor event
    */
@@ -34,12 +37,25 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
 
   /**
    * ########################################################################################
+   * Event Listeners ########################################################################
+   * ########################################################################################
+  */
+
+  Keyboard.fn.bindEvents = function() {
+    EventBus.addEventListener('ship-destroyed', function() { fireButtonEvt = 'restart-hit'; });
+    EventBus.addEventListener('ship-revived', function() { fireButtonEvt = 'firebutton-hit';});
+  };
+
+
+  /**
+   * ########################################################################################
    * Main states ############################################################################
    * ########################################################################################
   */
 
   Keyboard.fn.create = function() {
     this.initialize();
+    this.bindEvents();
   };
 
 
@@ -59,7 +75,7 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
     }
 
     if(this.fireButton.isDown) {
-      EventBus.dispatch('firebutton-hit', Keyboard.fn);
+      EventBus.dispatch(fireButtonEvt, Keyboard.fn);
     }
   };
 

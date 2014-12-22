@@ -14,13 +14,18 @@ Module('Shooter.Player.Ship', function(Ship) {
     this.ship = GAME.add.sprite(400, 500, 'ship');
     this.addProperties();
 
-    this.shields = GAME.add.text(
-      GAME.world.width - 150, 10, 'Shields ' + this.ship.health + '%', {
-        font: '20px Arial', fill: '#fff'
-      }
-    );
+    EventBus.dispatch('ship-created', Ship.fn, this.ship);
 
     this.bindEvents();
+  };
+
+
+  /**
+   * Reset ship
+   */
+  Ship.fn.reset = function() {
+    this.ship.revive();
+    this.ship.health = 100;
   };
 
 
@@ -44,10 +49,6 @@ Module('Shooter.Player.Ship', function(Ship) {
 
     this.ship.body.maxVelocity.setTo(MAXSPEED, MAXSPEED);
     this.ship.body.drag.setTo(DRAG, DRAG);
-
-    this.ship.events.onKilled.add(function() {
-      EventBus.dispatch('ship-killed', Ship.fn);
-    });
   };
 
 
@@ -155,21 +156,13 @@ Module('Shooter.Player.Ship', function(Ship) {
 
 
   /**
-   * Render ship's shields status
-   */
-  Ship.fn.renderShieldStatus = function() {
-    this.shields.text = 'Shields: ' + Math.max(this.ship.health, 0) + '%';
-  };
-
-
-  /**
    * Add damage to the ship
    * @param {Object} event
    * @param {Object} enemy The enemy that collided to the ship
    */
   Ship.fn.addDamage = function(event, enemy) {
     this.ship.damage(enemy.damageAmount);
-    this.renderShieldStatus();
+    EventBus.dispatch('ship-damaged', Ship.fn, this.ship);
   };
 
 
@@ -180,11 +173,23 @@ Module('Shooter.Player.Ship', function(Ship) {
   */
 
   Ship.fn.bindEvents = function() {
+    var self = this;
+
     EventBus.addEventListener('before-key-pressed', this.beforeMove,    Ship.fn);
     EventBus.addEventListener('cursorkey-pressed',  this.move,          Ship.fn);
     EventBus.addEventListener('mouse-moved',        this.moveWithMouse, Ship.fn);
     EventBus.addEventListener('bullets-ready',      this.fireBullets,   Ship.fn);
     EventBus.addEventListener('ships-collided',     this.addDamage,     Ship.fn);
+    EventBus.addEventListener('restart-hit',        this.reset,         Ship.fn);
+
+    this.ship.events.onKilled.add(function() {
+      EventBus.dispatch('ship-destroyed', Ship.fn, self.ship);
+    });
+
+    this.ship.events.onRevived.add(function() {
+      self.ship.health = 100;
+      EventBus.dispatch('ship-revived', Ship.fn, self.ship);
+    });
   };
 
 
@@ -200,6 +205,8 @@ Module('Shooter.Player.Ship', function(Ship) {
 
 
   Ship.fn.update = function() {
+    if(!this.ship.alive) return;
+
     this.stopAtScreenEdges();
     this.createBankEffect();
 

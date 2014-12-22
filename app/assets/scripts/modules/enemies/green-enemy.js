@@ -5,13 +5,25 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
       MAX_ENEMY_SPACING = 3000,
       ENEMY_SPEED       = 300;
 
+  var enemyLaunchTimer = 0;
+
   /**
    * Initialize
    */
   GreenEnemy.fn.initialize = function() {
     this.enemies = GAME.add.group();
     this.addProperties();
-    this.lauchEnemy();
+    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
+  };
+
+
+  /**
+   * Restart
+   */
+  GreenEnemy.fn.reset = function() {
+    this.enemies.callAll('kill');
+    GAME.time.events.remove(enemyLaunchTimer);
+    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
   };
 
 
@@ -89,10 +101,21 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
     }
 
     // Send another enemy soon
-    GAME.time.events.add(
+    enemyLaunchTimer = GAME.time.events.add(
       GAME.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING),
       this.lauchEnemy.bind(this)
-    )
+    );
+  };
+
+
+  /**
+   * ########################################################################################
+   * Event Listeners ########################################################################
+   * ########################################################################################
+  */
+
+  GreenEnemy.fn.bindEvents = function() {
+    EventBus.addEventListener('restart-hit', this.reset, GreenEnemy.fn);
   };
 
 
