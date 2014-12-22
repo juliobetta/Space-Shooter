@@ -45,6 +45,12 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
       enemy.body.velocity.x = GAME.rnd.integerInRange(-300, 300);
       enemy.body.velocity.y = ENEMY_SPEED;
       enemy.body.drag.x     = 100;
+
+      enemy.update = function() {
+        enemy.angle = 180 - GAME.math.radToDeg(
+          Math.atan2(enemy.body.velocity.x, enemy.body.velocity.y)
+        );
+      };
     }
 
     // Send another enemy soon
