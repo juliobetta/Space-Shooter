@@ -1,4 +1,4 @@
-Module('Shooter.Ship', function(Ship) {
+Module('Shooter.Player.Ship', function(Ship) {
   'use strict';
 
   var BULLET_SPEED   = 400,

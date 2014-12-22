@@ -1,4 +1,4 @@
-Module('Shooter.ShipTrail', function(ShipTrail) {
+Module('Shooter.Player.ShipTrail', function(ShipTrail) {
   'use strict';
 
   var initialized = false;
