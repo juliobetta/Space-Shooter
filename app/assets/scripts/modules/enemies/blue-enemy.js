@@ -7,6 +7,8 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
       FREQUENCY         = 70,
       SPREAD            = 60,
       ENEMY_SPEED       = 180,
+      BULLET_SPEED      = 400,
+      FIRING_DELAY      = 2000,
       DAMAGE_AMOUNT     = 40,
       ASSET_NAME        = 'enemy-blue',
       TOTAL_PER_TIME    = 30;
@@ -34,6 +36,24 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
 
 
   /**
+   * Get firing delay
+   * @return {Integer}
+   */
+  BlueEnemy.fn.getFiringDelay = function() {
+    return FIRING_DELAY;
+  };
+
+
+  /**
+   * Get bullet speed
+   * @return {Integer}
+   */
+  BlueEnemy.fn.getBulletSpeed = function() {
+    return BULLET_SPEED;
+  };
+
+
+  /**
    * Add property for each enemy
    */
   BlueEnemy.fn.addPropertiesForEach = function(enemy) {
@@ -46,15 +66,19 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
    * Launch green enemy
    */
   BlueEnemy.fn.lauchEnemy = function() {
-    var startingX = GAME.rnd.integerInRange(100, GAME.width - 100);
+    var startingX = GAME.rnd.integerInRange(100, GAME.width - 100),
+        enemy;
 
     for(var i = 0; i < TOTAL_IN_WAVE; i++) {
-      var enemy = this.enemies.getFirstExists(false);
+      enemy = this.enemies.getFirstExists(false);
 
       if(enemy) {
-        enemy.startingX = startingX;
         enemy.reset(GAME.width / 2, -VERTICAL_SPACING * i);
+
+        enemy.startingX       = startingX;
         enemy.body.velocity.y = ENEMY_SPEED;
+        enemy.bullets         = 1;
+        enemy.lastShot        = 0;
 
         enemy.update = function() {
           // Wave moviment
@@ -65,6 +89,8 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
 
           this.scale.x = 0.5 - Math.abs(bank) / 8;
           this.angle   = 180 - bank * 2;
+
+          EventBus.dispatch('blue-enemy-updated', BlueEnemy.fn, this);
 
           // Kill enemies once they go off screen
           if(this.y > GAME.height + 200) {

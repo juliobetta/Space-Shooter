@@ -55,7 +55,7 @@ Module('Shooter.Collision', function(Collision) {
 
     this.enemyExplosionEffect(explosion, enemy);
 
-    EventBus.dispatch('ships-collided', Collision.fn, enemy);
+    EventBus.dispatch('ships-collided', Collision.fn, enemy.damageAmount);
   };
 
 
@@ -79,6 +79,28 @@ Module('Shooter.Collision', function(Collision) {
     EventBus.dispatch('enemy-hit', Collision.fn, enemy.damageAmount);
   };
 
+
+  /**
+   * Collision between bullet and player's ship
+   * @param  {Object} player
+   * @param  {Object} bullet
+   */
+  Collision.fn.hitPlayer = function(player, bullet) {
+    var explosion = this.explosions.getFirstExists(false);
+
+    explosion.reset(
+      player.body.x + player.body.halfWidth,
+      player.body.y + player.body.halfHeight
+    );
+    explosion.alpha = 0.7;
+    explosion.play('explosion', 30, false, true);
+
+    bullet.kill();
+
+    EventBus.dispatch('player-hit', Collision.fn, bullet.damageAmount);
+  };
+
+
   /**
    * ########################################################################################
    * Main states ############################################################################
@@ -98,23 +120,31 @@ Module('Shooter.Collision', function(Collision) {
     [Shooter.Enemies.GreenEnemy, Shooter.Enemies.BlueEnemy].forEach(function(module) {
       // Collision between ships
       GAME.physics.arcade.overlap(
-        Shooter.Player.Ship.fn.ship,  // object 1
-        module.fn.enemies,            // object 2
-        self.shipsCollide.bind(self), // overlapCallback
-        null,                         // processCallback
-        this                          // callbackContext
+        Shooter.Player.Ship.fn.getShip(), // object 1
+        module.fn.getEnemies(),           // object 2
+        self.shipsCollide.bind(self),     // overlapCallback
+        null,                             // processCallback
+        this                              // callbackContext
       );
 
       // Collision between bullet and enemy
       GAME.physics.arcade.overlap(
-        module.fn.enemies,
-        Shooter.Bullet.fn.bullets,
+        module.fn.getEnemies(),
+        Shooter.Bullet.fn.getPlayerBullets(),
         self.hitEnemy.bind(self),
         null,
         this
       );
     });
 
+    // Collision between enemy's bullet and player
+    GAME.physics.arcade.overlap(
+      Shooter.Player.Ship.fn.getShip(),
+      Shooter.Bullet.fn.getBlueEnemyBullets(),
+      self.hitPlayer.bind(self),
+      null,
+      this
+    );
   };
 
   // ########################################################################################

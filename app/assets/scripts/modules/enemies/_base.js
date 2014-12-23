@@ -14,6 +14,15 @@ Module('Shooter.Enemies.Base', function(Base) {
 
 
   /**
+   * Get enemies
+   * @return {Array}
+   */
+  Base.fn.getEnemies = function() {
+    return this.enemies;
+  };
+
+
+  /**
    * Restart
    */
   Base.fn.reset = function() {

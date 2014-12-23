@@ -21,6 +21,15 @@ Module('Shooter.Player.Ship', function(Ship) {
 
 
   /**
+   * Get Ship
+   * @return {Object}
+   */
+  Ship.fn.getShip = function() {
+    return this.ship;
+  };
+
+
+  /**
    * Reset ship
    */
   Ship.fn.reset = function() {
@@ -157,11 +166,11 @@ Module('Shooter.Player.Ship', function(Ship) {
 
   /**
    * Add damage to the ship
-   * @param {Object} event
-   * @param {Object} enemy The enemy that collided to the ship
+   * @param {Object}  event
+   * @param {Integer} damage amount
    */
-  Ship.fn.addDamage = function(event, enemy) {
-    this.ship.damage(enemy.damageAmount);
+  Ship.fn.addDamage = function(event, damageAmount) {
+    this.ship.damage(damageAmount);
     EventBus.dispatch('ship-damaged', Ship.fn, this.ship);
   };
 
@@ -180,6 +189,7 @@ Module('Shooter.Player.Ship', function(Ship) {
     EventBus.addEventListener('mouse-moved',        this.moveWithMouse, Ship.fn);
     EventBus.addEventListener('bullets-ready',      this.fireBullets,   Ship.fn);
     EventBus.addEventListener('ships-collided',     this.addDamage,     Ship.fn);
+    EventBus.addEventListener('player-hit',         this.addDamage,     Ship.fn);
     EventBus.addEventListener('restart-hit',        this.reset,         Ship.fn);
 
     this.ship.events.onKilled.add(function() {
