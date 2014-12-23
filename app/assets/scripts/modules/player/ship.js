@@ -191,6 +191,7 @@ Module('Shooter.Player.Ship', function(Ship) {
               GAME.physics.arcade.velocityFromAngle(
                 spreadAngle - 90, BULLET_SPEED, bullet.body.velocity
               );
+              bullet.body.velocity.x = this.ship.body.velocity.x;
 
               this.ship.bulletTimer = GAME.time.now + BULLET_SPACING_LVL2;
             }
@@ -217,7 +218,7 @@ Module('Shooter.Player.Ship', function(Ship) {
    * @param  {Object} event
    * @param  {Integer} currentScore
    */
-  Ship.fn.upgradeWeapon  Sunction(event, currentScore) {
+  Ship.fn.upgradeWeapon = function(event, currentScore) {
     if(currentScore > 4000 && this.ship.weaponLevel < 2) {
       this.ship.weaponLevel = 2;
     }
@@ -240,7 +241,7 @@ Module('Shooter.Player.Ship', function(Ship) {
     EventBus.addEventListener('ships-collided',     this.addDamage,     Ship.fn);
     EventBus.addEventListener('player-hit',         this.addDamage,     Ship.fn);
     EventBus.addEventListener('restart-hit',        this.reset,         Ship.fn);
-    EventBus.addEventListener('score-increased',    this.upgradeWeapon, Ship.fn);
+    EventBus.addEventListener('score-increased',    this.upgradeWeapon,  Ship.fn);
 
     this.ship.events.onKilled.add(function() {
       EventBus.dispatch('ship-destroyed', Ship.fn, self.ship);

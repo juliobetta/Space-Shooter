@@ -110,7 +110,7 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
    * @param {Integer} currentScore
    */
   GreenEnemy.fn.increasePacing = function(event, currentScore) {
-    this.spacing *= currentScore > 1000 ? 2 : 0.9;
+    this.spacing *= currentScore > 1000 ? 0.2 : 0.9;
   };
 
 
