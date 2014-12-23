@@ -4,13 +4,12 @@
 Module('Shooter.Controls.Keyboard', function(Keyboard) {
   'use strict';
 
+  Shooter.extend(Keyboard.fn, Shooter.Controls.Base.fn);
+
   var LEFT  = 'left',
       RIGHT = 'right',
       UP    = 'up',
       DOWN  = 'down';
-
-  var fireButtonEvt = 'firebutton-hit';
-
 
   /**
    * Dispatch cursor event
@@ -37,27 +36,9 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
 
   /**
    * ########################################################################################
-   * Event Listeners ########################################################################
-   * ########################################################################################
-  */
-
-  Keyboard.fn.bindEvents = function() {
-    EventBus.addEventListener('ship-destroyed', function() { fireButtonEvt = 'restart-hit'; });
-    EventBus.addEventListener('ship-revived', function() { fireButtonEvt = 'firebutton-hit';});
-  };
-
-
-  /**
-   * ########################################################################################
    * Main states ############################################################################
    * ########################################################################################
   */
-
-  Keyboard.fn.create = function() {
-    this.initialize();
-    this.bindEvents();
-  };
-
 
   Keyboard.fn.update = function() {
     EventBus.dispatch('before-key-pressed', Keyboard.fn);
@@ -75,7 +56,7 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
     }
 
     if(this.fireButton.isDown) {
-      EventBus.dispatch(fireButtonEvt, Keyboard.fn);
+      EventBus.dispatch(this.getFireButtonEvent(), Keyboard.fn);
     }
   };
 

@@ -4,7 +4,15 @@
 Module('Shooter.Controls.Mouse', function(Mouse) {
   'use strict';
 
-  var fireButtonEvt = 'firebutton-hit';
+  Shooter.extend(Mouse.fn, Shooter.Controls.Base.fn);
+
+  /**
+   * Initialize
+   */
+  Mouse.fn.initialize = function() {
+    this.leftButton = GAME.input.activePointer;
+  };
+
 
   /**
    * Move sideways
@@ -22,32 +30,15 @@ Module('Shooter.Controls.Mouse', function(Mouse) {
 
   /**
    * ########################################################################################
-   * Event Listeners ########################################################################
-   * ########################################################################################
-  */
-
-  Mouse.fn.bindEvents = function() {
-    EventBus.addEventListener('ship-destroyed', function() { fireButtonEvt = 'restart-hit'; });
-    EventBus.addEventListener('ship-revived', function() { fireButtonEvt = 'firebutton-hit';});
-  };
-
-
-  /**
-   * ########################################################################################
    * Main states ############################################################################
    * ########################################################################################
   */
 
-  Mouse.fn.create = function() {
-    this.bindEvents();
-  };
-
-
   Mouse.fn.update = function() {
     this.moveSideways();
 
-    if(GAME.input.activePointer.isDown) {
-      EventBus.dispatch(fireButtonEvt, Mouse.fn);
+    if(this.leftButton.isDown) {
+      EventBus.dispatch(this.getFireButtonEvent(), Mouse.fn);
     }
   };
 
