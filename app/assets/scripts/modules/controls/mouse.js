@@ -47,7 +47,6 @@ Module('Shooter.Controls.Mouse', function(Mouse) {
     this.moveSideways();
 
     if(GAME.input.activePointer.isDown) {
-      console.log(fireButtonEvt);
       EventBus.dispatch(fireButtonEvt, Mouse.fn);
     }
   };

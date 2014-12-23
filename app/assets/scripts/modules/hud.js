@@ -4,15 +4,31 @@
 Module('Shooter.HUD', function(HUD) {
   'use strict';
 
+  /**
+   * Initialize
+   */
+  HUD.fn.initialize = function() {
+    this.gameOver        = null;
+    this.shieldStatus    = null;
+    this.currentScore    = 0;
+    this.scoreMultiplier = 10;
+
+    this.scoreText = GAME.add.text(
+      10, 10, 'Score: 0', {font: '20px Arial', fill: '#fff'}
+    );
+  };
+
 
   /**
    * Reset HUD
    * @param  {Object} event
    * @param  {Object} ship
    */
-  HUD.fn.resetHUD = function(event, ship) {
+  HUD.fn.reset = function(event, ship) {
+    this.currentScore = 0;
     this.gameOver.visible = false;
     this.renderShieldStatus(null, ship);
+    this.renderScoreText(null, 0, 0);
   };
 
 
@@ -31,6 +47,17 @@ Module('Shooter.HUD', function(HUD) {
 
 
   /**
+   * Render score text on hit enemy
+   * @param  {Object} event
+   * @param  {Integer} enemyDamageAmount
+   */
+  HUD.fn.renderScoreText = function(event, enemyDamageAmount) {
+    this.currentScore += enemyDamageAmount * this.scoreMultiplier;
+    this.scoreText.text = 'Score: ' + this.currentScore;
+  };
+
+
+  /**
    * Render ship's shields status
    */
   HUD.fn.renderShieldStatus = function(event, ship) {
@@ -42,7 +69,7 @@ Module('Shooter.HUD', function(HUD) {
    * Show game over screen
    */
   HUD.fn.showGameOverScreen = function() {
-    if(this.gameOver)  {
+    if(this.gameOver !== null)  {
       this.gameOver.visible = true;
       return;
     }
@@ -56,6 +83,7 @@ Module('Shooter.HUD', function(HUD) {
     );
 
     this.gameOver.anchor.setTo(0.5, 0.5);
+    this.gameOver.alpha = 0;
 
     fadeInGameOver = GAME.add.tween(this.gameOver);
     fadeInGameOver.to({alpha: 1}, 1000, Phaser.Easing.Quintic.Out);
@@ -70,10 +98,11 @@ Module('Shooter.HUD', function(HUD) {
   */
 
   HUD.fn.bindEvents = function() {
+    EventBus.addEventListener('ship-revived',   this.reset,              HUD.fn);
     EventBus.addEventListener('ship-created',   this.createShieldStatus, HUD.fn);
-    EventBus.addEventListener('ship-revived',   this.resetHUD,           HUD.fn);
     EventBus.addEventListener('ship-damaged',   this.renderShieldStatus, HUD.fn);
     EventBus.addEventListener('ship-destroyed', this.showGameOverScreen, HUD.fn);
+    EventBus.addEventListener('enemy-hit',      this.renderScoreText,    HUD.fn);
   };
 
 
@@ -84,6 +113,7 @@ Module('Shooter.HUD', function(HUD) {
   */
 
   HUD.fn.create = function() {
+    this.initialize();
     this.bindEvents();
   };
 

@@ -127,6 +127,7 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
 
   GreenEnemy.fn.create = function() {
     this.initialize();
+    this.bindEvents();
   };
 
 

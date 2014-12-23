@@ -75,6 +75,8 @@ Module('Shooter.Collision', function(Collision) {
     this.enemyExplosionEffect(explosion, enemy);
 
     bullet.kill();
+
+    EventBus.dispatch('enemy-hit', Collision.fn, enemy.damageAmount);
   };
 
   /**
