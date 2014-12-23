@@ -9,7 +9,6 @@ Module('Shooter.Enemies.Base', function(Base) {
     this.enemyLaunchTimer = 0;
     this.enemies = GAME.add.group();
     this.addGroupProperties();
-    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
   };
 
 
@@ -28,7 +27,6 @@ Module('Shooter.Enemies.Base', function(Base) {
   Base.fn.reset = function() {
     this.enemies.callAll('kill');
     GAME.time.events.remove(this.enemyLaunchTimer);
-    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
   };
 
 

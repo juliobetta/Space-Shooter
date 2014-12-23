@@ -1,15 +1,38 @@
 Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
   'use strict';
 
-  var MIN_ENEMY_SPACING = 300,
-      MAX_ENEMY_SPACING = 3000,
-      ENEMY_SPEED       = 300,
-      DAMAGE_AMOUNT     = 20,
-      ASSET_NAME        = 'enemy-green',
-      TOTAL_PER_TIME    = 5;
-
+  var ENEMY_SPEED     = 300,
+      DAMAGE_AMOUNT   = 20,
+      ASSET_NAME      = 'enemy-green',
+      TOTAL_PER_TIME  = 5;
 
   Shooter.extend(GreenEnemy.fn, Shooter.Enemies.Base.fn);
+
+
+  // create a copy of base initializer and reset
+  GreenEnemy.fn.baseInitializer = GreenEnemy.fn.initialize;
+  GreenEnemy.fn.baseReset       = GreenEnemy.fn.reset;
+
+
+  /**
+   * Initializer
+   */
+  GreenEnemy.fn.initialize = function() {
+    this.spacing = 1000;
+    this.baseInitializer();
+    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
+  };
+
+
+  /**
+   * Reset
+   */
+  GreenEnemy.fn.reset = function() {
+    this.spacing = 1000;
+    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
+    this.baseReset();
+  };
+
 
 
   /**
@@ -75,10 +98,21 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
 
     // Send another enemy soon
     this.enemyLaunchTimer = GAME.time.events.add(
-      GAME.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING),
+      GAME.rnd.integerInRange(this.spacing, this.spacing + 1000),
       this.lauchEnemy.bind(this)
     );
   };
+
+
+  /**
+   * Enemies come quicker as score increases
+   * @param {Object} event
+   * @param {Integer} currentScore
+   */
+  GreenEnemy.fn.increasePacing = function(event, currentScore) {
+    this.spacing *= currentScore > 1000 ? 2 : 0.9;
+  };
+
 
 
  /**
@@ -88,7 +122,8 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
   */
 
   GreenEnemy.fn.bindEvents = function() {
-    EventBus.addEventListener('restart-hit', this.reset, GreenEnemy.fn);
+    EventBus.addEventListener('restart-hit',     this.reset,          GreenEnemy.fn);
+    EventBus.addEventListener('score-increased', this.increasePacing, GreenEnemy.fn);
   };
 
   // ########################################################################################

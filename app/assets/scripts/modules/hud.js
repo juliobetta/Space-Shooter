@@ -54,6 +54,8 @@ Module('Shooter.HUD', function(HUD) {
   HUD.fn.updateScoreText = function(event, enemyDamageAmount) {
     this.currentScore += enemyDamageAmount * this.scoreMultiplier;
     this.scoreText.text = 'Score: ' + this.currentScore;
+
+    EventBus.dispatch('score-increased', HUD.fn, this.currentScore);
   };
 
 

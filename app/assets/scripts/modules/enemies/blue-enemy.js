@@ -2,7 +2,7 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
   'use strict';
 
   var TOTAL_IN_WAVE     = 5,
-      TIME_BTW_WAVES    = 7000,
+      TIME_BTW_WAVES    = 2500,
       VERTICAL_SPACING  = 70,
       FREQUENCY         = 70,
       SPREAD            = 60,
@@ -15,6 +15,28 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
 
 
   Shooter.extend(BlueEnemy.fn, Shooter.Enemies.Base.fn);
+
+  // create a copy of base initializer and reset
+  BlueEnemy.fn.baseInitializer = BlueEnemy.fn.initialize;
+  BlueEnemy.fn.baseReset       = BlueEnemy.fn.reset;
+
+
+  /**
+   * Initializer
+   */
+  BlueEnemy.fn.initialize = function() {
+    this.enemiesLaunched = false;
+    this.baseInitializer();
+  };
+
+
+  /**
+   * Reset
+   */
+  BlueEnemy.fn.reset = function() {
+    this.enemiesLaunched = false;
+    this.baseReset();
+  };
 
 
   /**
@@ -106,13 +128,27 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
 
 
   /**
+   * Enemies come quicker as score increases
+   * @param {Object} event
+   * @param {Integer} currentScore
+   */
+  BlueEnemy.fn.increasePacing = function(event, currentScore) {
+    if(!this.enemiesLaunched && currentScore > 1000) {
+      this.enemiesLaunched = true;
+      this.lauchEnemy();
+    }
+  };
+
+
+  /**
    * ########################################################################################
    * Event Listeners ########################################################################
    * ########################################################################################
   */
 
   BlueEnemy.fn.bindEvents = function() {
-    EventBus.addEventListener('restart-hit', this.reset, BlueEnemy.fn);
+    EventBus.addEventListener('restart-hit',     this.reset,          BlueEnemy.fn);
+    EventBus.addEventListener('score-increased', this.increasePacing, BlueEnemy.fn);
   };
 
 
