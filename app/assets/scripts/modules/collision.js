@@ -95,23 +95,26 @@ Module('Shooter.Collision', function(Collision) {
 
     // http://docs.phaser.io/Phaser.Physics.Arcade.html#overlap
 
-    // Collision between ships
-    GAME.physics.arcade.overlap(
-      Shooter.Player.Ship.fn.ship,           // object 1
-      Shooter.Enemies.GreenEnemy.fn.enemies, // object 2
-      self.shipsCollide.bind(self),          // overlapCallback
-      null,                                  // processCallback
-      this                                   // callbackContext
-    );
+    [Shooter.Enemies.GreenEnemy, Shooter.Enemies.BlueEnemy].forEach(function(module) {
+      // Collision between ships
+      GAME.physics.arcade.overlap(
+        Shooter.Player.Ship.fn.ship,  // object 1
+        module.fn.enemies,            // object 2
+        self.shipsCollide.bind(self), // overlapCallback
+        null,                         // processCallback
+        this                          // callbackContext
+      );
 
-    // Collision between bullet and enemy
-    GAME.physics.arcade.overlap(
-      Shooter.Enemies.GreenEnemy.fn.enemies,
-      Shooter.Bullet.fn.bullets,
-      self.hitEnemy.bind(self),
-      null,
-      this
-    );
+      // Collision between bullet and enemy
+      GAME.physics.arcade.overlap(
+        module.fn.enemies,
+        Shooter.Bullet.fn.bullets,
+        self.hitEnemy.bind(self),
+        null,
+        this
+      );
+    });
+
   };
 
   // ########################################################################################

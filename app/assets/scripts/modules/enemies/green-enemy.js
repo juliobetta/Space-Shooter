@@ -3,70 +3,43 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
 
   var MIN_ENEMY_SPACING = 300,
       MAX_ENEMY_SPACING = 3000,
-      ENEMY_SPEED       = 300;
+      ENEMY_SPEED       = 300,
+      DAMAGE_AMOUNT     = 20,
+      ASSET_NAME        = 'enemy-green',
+      TOTAL_PER_TIME    = 5;
 
-  var enemyLaunchTimer = 0;
+
+  Shooter.extend(GreenEnemy.fn, Shooter.Enemies.Base.fn);
+
 
   /**
-   * Initialize
+   * Get asset name
+   * @return {String}
    */
-  GreenEnemy.fn.initialize = function() {
-    this.enemies = GAME.add.group();
-    this.addProperties();
-    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
+  GreenEnemy.fn.getAssetName = function() {
+    return ASSET_NAME;
   };
 
 
   /**
-   * Restart
+   * Get total enemies per time
+   * @return {Integer}
    */
-  GreenEnemy.fn.reset = function() {
-    this.enemies.callAll('kill');
-    GAME.time.events.remove(enemyLaunchTimer);
-    GAME.time.events.add(1000, this.lauchEnemy.bind(this));
+  GreenEnemy.fn.getTotalPerTime = function() {
+    return TOTAL_PER_TIME;
   };
 
 
   /**
-   * Add green enemy properties
+   * Add property for each enemy
    */
-  GreenEnemy.fn.addProperties = function() {
-    var self = this;
-
-    this.enemies.enableBody = true;
-    this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
-    this.enemies.createMultiple(5, 'enemy-green');
-
-    this.enemies.setAll('anchor.x', 0.5);
-    this.enemies.setAll('anchor.y', 0.5);
-    this.enemies.setAll('scale.x', 0.5);
-    this.enemies.setAll('scale.y', 0.5);
-    this.enemies.setAll('angle', 180);
-
-    this.enemies.forEach(function(enemy) {
-      self.addEnemyEmitterTrail(enemy);
-      enemy.body.setSize(enemy.width * 3/4, enemy.height * 3/4);
-      enemy.damageAmount = 20;
-      enemy.events.onKilled.add(function() {
-        enemy.trail.kill();
-      });
+  GreenEnemy.fn.addPropertiesForEach = function(enemy) {
+    this.addEnemyEmitterTrail(enemy);
+    enemy.body.setSize(enemy.width * 3/4, enemy.height * 3/4);
+    enemy.damageAmount = DAMAGE_AMOUNT;
+    enemy.events.onKilled.add(function() {
+      enemy.trail.kill();
     });
-  };
-
-
-  /**
-   * Add emiter trail for enemy
-   */
-  GreenEnemy.fn.addEnemyEmitterTrail = function(enemy) {
-    var enemyTrail = GAME.add.emitter(enemy.x, enemy.y - 10, 100);
-
-    enemyTrail.width = 10;
-    enemyTrail.makeParticles('explosion', [1,2,3,4,5]);
-    enemyTrail.setXSpeed(20, -20);
-    enemyTrail.setRotation(50, -50);
-    enemyTrail.setAlpha(0.4, 0, 800);
-    enemyTrail.setScale(0.01, 0.1, 0.01, 0.1, 1000, Phaser.Easing.Quintic.Out);
-    enemy.trail = enemyTrail;
   };
 
 
@@ -101,14 +74,14 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
     }
 
     // Send another enemy soon
-    enemyLaunchTimer = GAME.time.events.add(
+    this.enemyLaunchTimer = GAME.time.events.add(
       GAME.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING),
       this.lauchEnemy.bind(this)
     );
   };
 
 
-  /**
+ /**
    * ########################################################################################
    * Event Listeners ########################################################################
    * ########################################################################################
@@ -118,31 +91,9 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
     EventBus.addEventListener('restart-hit', this.reset, GreenEnemy.fn);
   };
 
-
-  /**
-   * ########################################################################################
-   * Main states ############################################################################
-   * ########################################################################################
-  */
-
-  GreenEnemy.fn.create = function() {
-    this.initialize();
-    this.bindEvents();
-  };
-
-
-  GreenEnemy.fn.update = function() {
-  };
-
-
-  GreenEnemy.fn.render = function() {
-    // for(var i = 0; i < this.enemies.length; i++) {
-    //   GAME.debug.body(this.enemies.children[i]);
-    // }
-  };
-
   // ########################################################################################
   // ########################################################################################
+
 
   Shooter.Application.addToCreate(GreenEnemy.fn.create.bind(GreenEnemy.fn));
   Shooter.Application.addToUpdate(GreenEnemy.fn.update.bind(GreenEnemy.fn));

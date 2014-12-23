@@ -8,6 +8,7 @@ Module('Shooter.Assets', function(Assets) {
     GAME.load.image('ship',        '/assets/images/ship.png');
     GAME.load.image('bullet',      '/assets/images/bullet.png');
     GAME.load.image('enemy-green', '/assets/images/enemy-green.png');
+    GAME.load.image('enemy-blue',  '/assets/images/enemy-blue.png');
 
     GAME.load.spritesheet('explosion', '/assets/images/explode.png', 128, 128);
   };
