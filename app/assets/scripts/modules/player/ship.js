@@ -1,11 +1,9 @@
 Module('Shooter.Player.Ship', function(Ship) {
   'use strict';
 
-  var BULLET_SPEED   = 400,
-      BULLET_SPACING = 250;
-
-  var bulletTimer = 0;
-
+  var BULLET_SPEED        = 400,
+      BULLET_SPACING_LVL1 = 250,
+      BULLET_SPACING_LVL2 = 550;
 
   /**
    * Initialize
@@ -34,7 +32,9 @@ Module('Shooter.Player.Ship', function(Ship) {
    */
   Ship.fn.reset = function() {
     this.ship.revive();
-    this.ship.health = 100;
+    this.ship.health      = 100;
+    this.ship.weaponLevel = 1;
+    this.ship.bulletTimer = 0;
   };
 
 
@@ -51,7 +51,10 @@ Module('Shooter.Player.Ship', function(Ship) {
    * Add player properties
    */
   Ship.fn.addProperties = function() {
-    this.ship.health = 100;
+    this.ship.health      = 100;
+    this.ship.weaponLevel = 1;
+    this.ship.bulletTimer = 0;
+
     this.ship.anchor.setTo(0.5, 0.5);
 
     GAME.physics.enable(this.ship, Phaser.Physics.ARCADE);
@@ -130,6 +133,16 @@ Module('Shooter.Player.Ship', function(Ship) {
 
 
   /**
+   * Make bullet come out of tip of ship with right angle
+   * @param  {Object} bullet
+   */
+  Ship.fn.resetBullet = function(bullet) {
+    var bulletOffset = 20 * Math.sin(GAME.math.degToRad(this.ship.angle));
+    bullet.reset(this.ship.x + bulletOffset, this.ship.y);
+  };
+
+
+  /**
    * Fire bullets
    * @param  {Object} event
    * @param  {Array} bullets
@@ -137,27 +150,51 @@ Module('Shooter.Player.Ship', function(Ship) {
   Ship.fn.fireBullets = function(event, bullets) {
     if(!this.ship.alive) return;
 
-    var bullet, bulletOffset;
+    var bullet, bulletOffset, spreadAngle;
 
     //  To avoid them being allowed to fire too fast we set a time limit
-    if (GAME.time.now > bulletTimer) {
+    if(GAME.time.now > this.ship.bulletTimer) {
 
-      // Grab the first bullet we can from the pool and fire it
-      bullet = bullets.getFirstExists(false);
+      switch(this.ship.weaponLevel) {
+        case 1:
+          // Grab the first bullet we can from the pool and fire it
+          bullet = bullets.getFirstExists(false);
 
-      if(bullet) {
-        // Make bullet come out of tip of ship with right angle
-        bulletOffset = 20 * Math.sin(GAME.math.degToRad(this.ship.angle));
-        bullet.reset(this.ship.x + bulletOffset, this.ship.y);
-        bullet.angle = this.ship.angle;
+          if(bullet) {
+            this.resetBullet(bullet);
 
-        GAME.physics.arcade.velocityFromAngle(
-          bullet.angle - 90, BULLET_SPEED, bullet.body.velocity
-        );
+            bullet.angle = this.ship.angle;
 
-        bullet.body.velocity.x += this.ship.body.velocity.x;
+            GAME.physics.arcade.velocityFromAngle(
+              bullet.angle - 90, BULLET_SPEED, bullet.body.velocity
+            );
 
-        bulletTimer = GAME.time.now + BULLET_SPACING;
+            bullet.body.velocity.x += this.ship.body.velocity.x;
+
+            this.ship.bulletTimer = GAME.time.now + BULLET_SPACING_LVL1;
+          }
+          break;
+
+        case 2:
+          for(var i = 0; i < 3; i++) {
+            bullet = bullets.getFirstExists(false);
+
+            if(bullet) {
+              this.resetBullet(bullet);
+
+              // Spread angle of 1st and 3rd bullets
+              if(i === 0) spreadAngle = -20;
+              if(i === 1) spreadAngle = 0;
+              if(i === 2) spreadAngle = 20;
+
+              bullet.angle = this.ship.angle + spreadAngle;
+              GAME.physics.arcade.velocityFromAngle(
+                spreadAngle - 90, BULLET_SPEED, bullet.body.velocity
+              );
+
+              this.ship.bulletTimer = GAME.time.now + BULLET_SPACING_LVL2;
+            }
+          }
       }
 
     }
@@ -172,6 +209,18 @@ Module('Shooter.Player.Ship', function(Ship) {
   Ship.fn.addDamage = function(event, damageAmount) {
     this.ship.damage(damageAmount);
     EventBus.dispatch('ship-damaged', Ship.fn, this.ship);
+  };
+
+
+  /**
+   * Update weapon if score > 4000
+   * @param  {Object} event
+   * @param  {Integer} currentScore
+   */
+  Ship.fn.upgradeWeapon  Sunction(event, currentScore) {
+    if(currentScore > 4000 && this.ship.weaponLevel < 2) {
+      this.ship.weaponLevel = 2;
+    }
   };
 
 
@@ -191,6 +240,7 @@ Module('Shooter.Player.Ship', function(Ship) {
     EventBus.addEventListener('ships-collided',     this.addDamage,     Ship.fn);
     EventBus.addEventListener('player-hit',         this.addDamage,     Ship.fn);
     EventBus.addEventListener('restart-hit',        this.reset,         Ship.fn);
+    EventBus.addEventListener('score-increased',    this.upgradeWeapon, Ship.fn);
 
     this.ship.events.onKilled.add(function() {
       EventBus.dispatch('ship-destroyed', Ship.fn, self.ship);
