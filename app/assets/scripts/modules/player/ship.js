@@ -191,7 +191,7 @@ Module('Shooter.Player.Ship', function(Ship) {
               GAME.physics.arcade.velocityFromAngle(
                 spreadAngle - 90, BULLET_SPEED, bullet.body.velocity
               );
-              bullet.body.velocity.x = this.ship.body.velocity.x;
+              bullet.body.velocity.x += this.ship.body.velocity.x;
 
               this.ship.bulletTimer = GAME.time.now + BULLET_SPACING_LVL2;
             }

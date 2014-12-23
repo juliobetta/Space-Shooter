@@ -25,7 +25,7 @@ gulp.task('lint', function() {
 gulp.task('sass', function() {
     return gulp.src('app/assets/styles/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest('dist/assets/css'));
 });
 
 
