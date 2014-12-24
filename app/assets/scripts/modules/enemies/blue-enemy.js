@@ -16,17 +16,12 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
 
   Shooter.extend(BlueEnemy.fn, Shooter.Enemies.Base.fn);
 
-  // create a copy of base initializer and reset
-  BlueEnemy.fn.baseInitializer = BlueEnemy.fn.initialize;
-  BlueEnemy.fn.baseReset       = BlueEnemy.fn.reset;
-
-
   /**
    * Initializer
    */
   BlueEnemy.fn.initialize = function() {
     this.enemiesLaunched = false;
-    this.baseInitializer();
+    this.super.initialize();
   };
 
 
@@ -35,7 +30,7 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
    */
   BlueEnemy.fn.reset = function() {
     this.enemiesLaunched = false;
-    this.baseReset();
+    this.super.reset();
   };
 
 

@@ -9,17 +9,13 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
   Shooter.extend(GreenEnemy.fn, Shooter.Enemies.Base.fn);
 
 
-  // create a copy of base initializer and reset
-  GreenEnemy.fn.baseInitializer = GreenEnemy.fn.initialize;
-  GreenEnemy.fn.baseReset       = GreenEnemy.fn.reset;
-
-
   /**
    * Initializer
    */
   GreenEnemy.fn.initialize = function() {
     this.spacing = 1000;
-    this.baseInitializer();
+    console.log(this.super);
+    this.super.initialize();
     GAME.time.events.add(1000, this.lauchEnemy.bind(this));
   };
 
@@ -30,7 +26,7 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
   GreenEnemy.fn.reset = function() {
     this.spacing = 1000;
     GAME.time.events.add(1000, this.lauchEnemy.bind(this));
-    this.baseReset();
+    this.super.reset();
   };
 
 
