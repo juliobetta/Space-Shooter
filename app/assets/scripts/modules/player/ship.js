@@ -89,14 +89,17 @@ Module('Shooter.Player.Ship', function(Ship) {
 
   /**
    * Move ship with mouse
-   * @param  {Object} event
-   * @param  {Integer} inputX Game input x position
+   * @param {Object} event
+   * @param {Integer} inputX Game input x position
+   * @param {Integer} inputY Game input y position
    */
-  Ship.fn.moveWithMouse = function(event, inputX) {
+  Ship.fn.moveWithMouse = function(event, inputX, inputY) {
     var minDist = 200,
-        dist    = inputX - this.ship.x;
+        distX   = inputX - this.ship.x,
+        distY   = inputY - this.ship.y;
 
-    this.ship.body.velocity.x = MAXSPEED * GAME.math.clamp(dist / minDist, -1, 1);
+    this.ship.body.velocity.x = MAXSPEED * GAME.math.clamp(distX / minDist, -1, 1);
+    this.ship.body.velocity.y = MAXSPEED * GAME.math.clamp(distY / minDist, -1, 1);
   };
 
 
