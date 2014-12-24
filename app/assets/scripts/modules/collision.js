@@ -93,7 +93,8 @@ Module('Shooter.Collision', function(Collision) {
       player.body.y + player.body.halfHeight
     );
     explosion.alpha = 0.7;
-    explosion.play('explosion', 30, false, true);
+
+    if(player.health > 0) explosion.play('explosion', 30, false, true);
 
     bullet.kill();
 

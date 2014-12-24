@@ -206,12 +206,36 @@ Module('Shooter.Player.Ship', function(Ship) {
 
 
   /**
+   * Create player's death explosion
+   */
+  Ship.fn.playDeathExplosion = function() {
+    var deathExplosion = GAME.add.emitter(this.ship.x, this.ship.y);
+
+    deathExplosion.width  = 50;
+    deathExplosion.height = 50;
+    deathExplosion.x      = this.ship.x;
+    deathExplosion.y      = this.ship.y;
+
+    deathExplosion.makeParticles('explosion', [0,1,2,3,4,5,6,7], 10);
+    deathExplosion.setAlpha(0.9, 0, 800);
+    deathExplosion.setScale(0.1, 0.6, 0.1, 0.6, 1000, Phaser.Easing.Quintic.OUT);
+    deathExplosion.start(false, 1000, 10, 10);
+
+  };
+
+
+  /**
    * Add damage to the ship
    * @param {Object}  event
    * @param {Integer} damage amount
    */
   Ship.fn.addDamage = function(event, damageAmount) {
     this.ship.damage(damageAmount);
+
+    if(this.ship.health <= 0) {
+      this.playDeathExplosion();
+    }
+
     EventBus.dispatch('ship-damaged', Ship.fn, this.ship);
   };
 
