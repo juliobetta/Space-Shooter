@@ -1,4 +1,4 @@
-Module('Shooter.Enemies.Base', function(Base) {
+Module('Shooter.Game.Enemies.Base', function(Base) {
   'use strict';
 
 

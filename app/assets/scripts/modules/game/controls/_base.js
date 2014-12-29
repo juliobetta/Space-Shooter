@@ -1,4 +1,4 @@
-Module('Shooter.Controls.Base', function(Base) {
+Module('Shooter.Game.Controls.Base', function(Base) {
   'use strict';
 
   var fireButtonEvt = 'firebutton-hit';

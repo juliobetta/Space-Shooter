@@ -1,4 +1,4 @@
-Module('Shooter.Collision', function(Collision) {
+Module('Shooter.Game.Collision', function(Collision) {
   'use strict';
 
 
@@ -118,10 +118,10 @@ Module('Shooter.Collision', function(Collision) {
 
     // http://docs.phaser.io/Phaser.Physics.Arcade.html#overlap
 
-    [Shooter.Enemies.GreenEnemy, Shooter.Enemies.BlueEnemy].forEach(function(module) {
+    [Shooter.Game.Enemies.GreenEnemy, Shooter.Game.Enemies.BlueEnemy].forEach(function(module) {
       // Collision between ships
       GAME.physics.arcade.overlap(
-        Shooter.Player.Ship.fn.getShip(), // object 1
+        Shooter.Game.Player.Ship.fn.getShip(), // object 1
         module.fn.getEnemies(),           // object 2
         self.shipsCollide.bind(self),     // overlapCallback
         null,                             // processCallback
@@ -131,7 +131,7 @@ Module('Shooter.Collision', function(Collision) {
       // Collision between bullet and enemy
       GAME.physics.arcade.overlap(
         module.fn.getEnemies(),
-        Shooter.Bullet.fn.getPlayerBullets(),
+        Shooter.Game.Bullet.fn.getPlayerBullets(),
         self.hitEnemy.bind(self),
         null,
         this
@@ -140,8 +140,8 @@ Module('Shooter.Collision', function(Collision) {
 
     // Collision between enemy's bullet and player
     GAME.physics.arcade.overlap(
-      Shooter.Player.Ship.fn.getShip(),
-      Shooter.Bullet.fn.getBlueEnemyBullets(),
+      Shooter.Game.Player.Ship.fn.getShip(),
+      Shooter.Game.Bullet.fn.getBlueEnemyBullets(),
       self.hitPlayer.bind(self),
       null,
       this
@@ -151,6 +151,6 @@ Module('Shooter.Collision', function(Collision) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(Collision.fn.create.bind(Collision.fn));
-  Shooter.Application.addToUpdate(Collision.fn.update.bind(Collision.fn));
+  Shooter.States.Game.fn.addToCreate(Collision.fn.create.bind(Collision.fn));
+  Shooter.States.Game.fn.addToUpdate(Collision.fn.update.bind(Collision.fn));
 });

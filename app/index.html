@@ -15,20 +15,23 @@
   <script type="text/javascript" src="assets/scripts/utils/constants.js"></script>
   <script type="text/javascript" src="assets/scripts/utils/namespace.js"></script>
   <script type="text/javascript" src="assets/scripts/utils/extend.js"></script>
-  <script type="text/javascript" src="assets/scripts/app.js"></script>
-  <script type="text/javascript" src="assets/scripts/configs/assets.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/controls/_base.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/controls/keyboard.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/controls/mouse.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/starfield.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/bullet.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/collision.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/hud.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/player/ship.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/player/ship-trail.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/enemies/_base.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/enemies/green-enemy.js"></script>
-  <script type="text/javascript" src="assets/scripts/modules/enemies/blue-enemy.js"></script>
+  <script type="text/javascript" src="assets/scripts/states/_base.js"></script>
+  <script type="text/javascript" src="assets/scripts/states/preloader.js"></script>
+  <script type="text/javascript" src="assets/scripts/states/main-menu.js"></script>
+  <script type="text/javascript" src="assets/scripts/states/game.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/controls/_base.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/controls/keyboard.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/controls/mouse.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/starfield.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/bullet.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/collision.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/hud.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/player/ship.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/player/ship-trail.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/enemies/_base.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/enemies/green-enemy.js"></script>
+  <script type="text/javascript" src="assets/scripts/modules/game/enemies/blue-enemy.js"></script>
+  <script type="text/javascript" src="assets/scripts/boot.js"></script>
   <!-- endbuild -->
 
   <script>
@@ -36,7 +39,7 @@
      * Run Application modules and Components
      * @return {void}
      */
-    window.onload = function() { Shooter.Application.run(); };
+    window.onload = function() { Shooter.Boot.initialize(); };
   </script>
 
 </html>

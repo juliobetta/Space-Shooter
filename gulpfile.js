@@ -54,7 +54,7 @@ gulp.task('copy-images', function() {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('app/assets/scripts/**/*.js', ['lint', 'usemin']);
+    gulp.watch('app/assets/scripts/**/*.js', ['usemin']);
     gulp.watch('app/assets/styles/*.scss', ['sass']);
     gulp.watch('app/assets/images/*', ['copy-images']);
 });
@@ -69,4 +69,4 @@ gulp.task('connect', function() {
 
 
 // Default Task
-gulp.task('default', ['lint', 'sass', 'delete-dist', 'usemin', 'copy-images', 'watch', 'connect']);
+gulp.task('default', ['sass', 'delete-dist', 'usemin', 'copy-images', 'watch', 'connect']);

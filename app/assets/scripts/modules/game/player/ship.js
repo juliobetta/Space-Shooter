@@ -1,4 +1,4 @@
-Module('Shooter.Player.Ship', function(Ship) {
+Module('Shooter.Game.Player.Ship', function(Ship) {
   'use strict';
 
   var BULLET_SPEED        = 400,
@@ -309,7 +309,7 @@ Module('Shooter.Player.Ship', function(Ship) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(Ship.fn.create.bind(Ship.fn));
-  Shooter.Application.addToUpdate(Ship.fn.update.bind(Ship.fn));
-  Shooter.Application.addToRender(Ship.fn.render.bind(Ship.fn));
+  Shooter.States.Game.fn.addToCreate(Ship.fn.create.bind(Ship.fn));
+  Shooter.States.Game.fn.addToUpdate(Ship.fn.update.bind(Ship.fn));
+  Shooter.States.Game.fn.addToRender(Ship.fn.render.bind(Ship.fn));
 });

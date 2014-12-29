@@ -1,4 +1,4 @@
-Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
+Module('Shooter.Game.Enemies.BlueEnemy', function(BlueEnemy) {
   'use strict';
 
   var TOTAL_IN_WAVE     = 5,
@@ -14,7 +14,7 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
       TOTAL_PER_TIME    = 30;
 
 
-  Shooter.extend(BlueEnemy.fn, Shooter.Enemies.Base.fn);
+  Shooter.extend(BlueEnemy.fn, Shooter.Game.Enemies.Base.fn);
 
   /**
    * Initializer
@@ -150,7 +150,7 @@ Module('Shooter.Enemies.BlueEnemy', function(BlueEnemy) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(BlueEnemy.fn.create.bind(BlueEnemy.fn));
-  Shooter.Application.addToUpdate(BlueEnemy.fn.update.bind(BlueEnemy.fn));
-  Shooter.Application.addToRender(BlueEnemy.fn.render.bind(BlueEnemy.fn));
+  Shooter.States.Game.fn.addToCreate(BlueEnemy.fn.create.bind(BlueEnemy.fn));
+  Shooter.States.Game.fn.addToUpdate(BlueEnemy.fn.update.bind(BlueEnemy.fn));
+  Shooter.States.Game.fn.addToRender(BlueEnemy.fn.render.bind(BlueEnemy.fn));
 });
