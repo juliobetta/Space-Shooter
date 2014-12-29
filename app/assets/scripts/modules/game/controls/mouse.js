@@ -1,10 +1,10 @@
 /**
  * Add mouse controls to play the game
  */
-Module('Shooter.Controls.Mouse', function(Mouse) {
+Module('Shooter.Game.Controls.Mouse', function(Mouse) {
   'use strict';
 
-  Shooter.extend(Mouse.fn, Shooter.Controls.Base.fn);
+  Shooter.extend(Mouse.fn, Shooter.Game.Controls.Base.fn);
 
   /**
    * Initialize
@@ -43,6 +43,6 @@ Module('Shooter.Controls.Mouse', function(Mouse) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(Mouse.fn.create.bind(Mouse.fn));
-  Shooter.Application.addToUpdate(Mouse.fn.update.bind(Mouse.fn));
+  Shooter.States.Game.fn.addToCreate(Mouse.fn.create.bind(Mouse.fn));
+  Shooter.States.Game.fn.addToUpdate(Mouse.fn.update.bind(Mouse.fn));
 });

@@ -1,7 +1,7 @@
 /**
  * Display game information
  */
-Module('Shooter.HUD', function(HUD) {
+Module('Shooter.Game.HUD', function(HUD) {
   'use strict';
 
   /**
@@ -122,5 +122,5 @@ Module('Shooter.HUD', function(HUD) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(HUD.fn.create.bind(HUD.fn));
+  Shooter.States.Game.fn.addToCreate(HUD.fn.create.bind(HUD.fn));
 });

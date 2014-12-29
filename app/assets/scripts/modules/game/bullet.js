@@ -1,4 +1,4 @@
-Module('Shooter.Bullet', function(Bullet) {
+Module('Shooter.Game.Bullet', function(Bullet) {
   'use strict';
 
   /**
@@ -87,7 +87,7 @@ Module('Shooter.Bullet', function(Bullet) {
    */
   Bullet.fn.shootEnemyBullet = function(event, enemy) {
     var bullet = this.blueEnemyBullets.getFirstExists(false),
-        player = Shooter.Player.Ship.fn.getShip(),
+        player = Shooter.Game.Player.Ship.fn.getShip(),
         angle;
 
     if(bullet
@@ -136,5 +136,5 @@ Module('Shooter.Bullet', function(Bullet) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(Bullet.fn.create.bind(Bullet.fn));
+  Shooter.States.Game.fn.addToCreate(Bullet.fn.create.bind(Bullet.fn));
 });

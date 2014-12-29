@@ -1,10 +1,10 @@
 /**
  * Add Keyboard controls to play the game
  */
-Module('Shooter.Controls.Keyboard', function(Keyboard) {
+Module('Shooter.Game.Controls.Keyboard', function(Keyboard) {
   'use strict';
 
-  Shooter.extend(Keyboard.fn, Shooter.Controls.Base.fn);
+  Shooter.extend(Keyboard.fn, Shooter.Game.Controls.Base.fn);
 
   var LEFT  = 'left',
       RIGHT = 'right',
@@ -15,7 +15,8 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
    * Dispatch cursor event
    */
   Keyboard.fn.dispatchCursorEvent = function(direction) {
-    var acceleration = direction === LEFT || direction === UP ? -ACCELERATION : ACCELERATION,
+    var acceleration = direction === LEFT || direction === UP
+          ? -ACCELERATION : ACCELERATION,
         coordinate   = direction === LEFT || direction === RIGHT ? 'x' : 'y';
 
     EventBus.dispatch('cursorkey-pressed', Keyboard.fn, coordinate, acceleration);
@@ -64,6 +65,6 @@ Module('Shooter.Controls.Keyboard', function(Keyboard) {
   // ########################################################################################
 
 
-  Shooter.Application.addToCreate(Keyboard.fn.create.bind(Keyboard.fn));
-  Shooter.Application.addToUpdate(Keyboard.fn.update.bind(Keyboard.fn));
+  Shooter.States.Game.fn.addToCreate(Keyboard.fn.create.bind(Keyboard.fn));
+  Shooter.States.Game.fn.addToUpdate(Keyboard.fn.update.bind(Keyboard.fn));
 });

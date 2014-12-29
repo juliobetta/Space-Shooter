@@ -1,4 +1,4 @@
-Module('Shooter.Player.ShipTrail', function(ShipTrail) {
+Module('Shooter.Game.Player.ShipTrail', function(ShipTrail) {
   'use strict';
 
   var initialized = false;
@@ -79,5 +79,5 @@ Module('Shooter.Player.ShipTrail', function(ShipTrail) {
   // ########################################################################################
   // ########################################################################################
 
-  Shooter.Application.addToCreate(ShipTrail.fn.create.bind(ShipTrail.fn));
+  Shooter.States.Game.fn.addToCreate(ShipTrail.fn.create.bind(ShipTrail.fn));
 });

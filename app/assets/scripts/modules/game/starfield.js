@@ -1,4 +1,4 @@
-Module('Shooter.Starfield', function(Starfield) {
+Module('Shooter.Game.Starfield', function(Starfield) {
   'use strict';
 
   /**
@@ -21,6 +21,6 @@ Module('Shooter.Starfield', function(Starfield) {
   // ########################################################################################
 
 
-  Shooter.Application.addToCreate(Starfield.fn.create.bind(Starfield.fn));
-  Shooter.Application.addToUpdate(Starfield.fn.update.bind(Starfield.fn));
+  Shooter.States.Game.fn.addToCreate(Starfield.fn.create.bind(Starfield.fn));
+  Shooter.States.Game.fn.addToUpdate(Starfield.fn.update.bind(Starfield.fn));
 });

@@ -1,4 +1,4 @@
-Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
+Module('Shooter.Game.Enemies.GreenEnemy', function(GreenEnemy) {
   'use strict';
 
   var ENEMY_SPEED     = 300,
@@ -6,7 +6,7 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
       ASSET_NAME      = 'enemy-green',
       TOTAL_PER_TIME  = 5;
 
-  Shooter.extend(GreenEnemy.fn, Shooter.Enemies.Base.fn);
+  Shooter.extend(GreenEnemy.fn, Shooter.Game.Enemies.Base.fn);
 
 
   /**
@@ -14,7 +14,6 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
    */
   GreenEnemy.fn.initialize = function() {
     this.spacing = 1000;
-    console.log(this.super);
     this.super.initialize();
     GAME.time.events.add(1000, this.lauchEnemy.bind(this));
   };
@@ -126,7 +125,7 @@ Module('Shooter.Enemies.GreenEnemy', function(GreenEnemy) {
   // ########################################################################################
 
 
-  Shooter.Application.addToCreate(GreenEnemy.fn.create.bind(GreenEnemy.fn));
-  Shooter.Application.addToUpdate(GreenEnemy.fn.update.bind(GreenEnemy.fn));
-  Shooter.Application.addToRender(GreenEnemy.fn.render.bind(GreenEnemy.fn));
+  Shooter.States.Game.fn.addToCreate(GreenEnemy.fn.create.bind(GreenEnemy.fn));
+  Shooter.States.Game.fn.addToUpdate(GreenEnemy.fn.update.bind(GreenEnemy.fn));
+  Shooter.States.Game.fn.addToRender(GreenEnemy.fn.render.bind(GreenEnemy.fn));
 });
