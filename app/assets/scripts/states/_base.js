@@ -7,10 +7,10 @@ Module('Shooter.States.Base', function(Base) {
   Base.fn.initialize = function() {
     this.initialized = false;
 
-    this.preload = [];
-    this.create  = [];
-    this.update  = [];
-    this.render  = [];
+    this._preload = [];
+    this._create  = [];
+    this._update  = [];
+    this._render  = [];
   };
 
 
@@ -19,9 +19,9 @@ Module('Shooter.States.Base', function(Base) {
    * @param {Function} fn
    */
   Base.fn.addToPreload = function(fn) {
-    if(this.preload === undefined) this.preload = [];
+    if(this._preload === undefined) this._preload = [];
 
-    this.preload.push(fn);
+    this._preload.push(fn);
   };
 
 
@@ -30,8 +30,8 @@ Module('Shooter.States.Base', function(Base) {
    * @param {Function} fn
    */
   Base.fn.addToCreate = function(fn) {
-    if(this.create === undefined) this.create = [];
-    this.create.push(fn);
+    if(this._create === undefined) this._create = [];
+    this._create.push(fn);
   };
 
 
@@ -40,8 +40,8 @@ Module('Shooter.States.Base', function(Base) {
    * @param {Function} fn
    */
   Base.fn.addToUpdate = function(fn) {
-    if(this.update === undefined) this.update = [];
-    this.update.push(fn);
+    if(this._update === undefined) this._update = [];
+    this._update.push(fn);
   };
 
 
@@ -50,8 +50,8 @@ Module('Shooter.States.Base', function(Base) {
    * @param {Function} fn
    */
   Base.fn.addToRender = function(fn) {
-    if(this.render === undefined) this.render = [];
-    this.render.push(fn);
+    if(this._render === undefined) this._render = [];
+    this._render.push(fn);
   };
 
 
@@ -76,25 +76,25 @@ Module('Shooter.States.Base', function(Base) {
     // Create game main state
     state = {
       preload: function() {
-        self.preload.forEach(function(fn){
+        self._preload.forEach(function(fn){
           fn();
         });
       },
 
       create: function() {
-        self.create.forEach(function(fn){
+        self._create.forEach(function(fn){
           fn();
         });
       },
 
       update: function() {
-        self.update.forEach(function(fn){
+        self._update.forEach(function(fn){
           fn();
         });
       },
 
       render: function() {
-        self.render.forEach(function(fn) {
+        self._render.forEach(function(fn) {
           fn();
         });
       }
