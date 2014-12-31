@@ -2,7 +2,7 @@
   "name": "space-shooter",
   "private": true,
   "dependencies": {
-    "phaser": "~2.2.0",
+    "phaser": "~2.1.0",
     "module": "~1.0.2",
     "EventBus": "https://github.com/krasimir/EventBus.git"
   }
